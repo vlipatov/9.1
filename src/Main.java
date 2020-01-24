@@ -20,7 +20,6 @@ public class Main {
                 insideFolders.append(file.getAbsolutePath() + "\n");
             }
         }
-        if (length > )
         long lengthKB = length/(1024);
         long lengthMB = length/((1024) * (1024));
         long lengthGB= lengthMB/(1024);

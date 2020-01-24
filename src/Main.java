@@ -1,33 +1,54 @@
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         String path;
-        long length = 0;
-        StringBuilder insideFolders = new StringBuilder();
+        float length;
         System.out.println("Введите путь к папке. \nФормат для ввода - C:\\Users\\username\\folderName");
         Scanner scanner = new Scanner(System.in);
         path = scanner.nextLine();
         File folder = new File(path);
-        File[] files = folder.listFiles();
-        for(File file : files) {
-            if (file.isFile()) {
-                length += file.length();
-            }
-            if(file.isDirectory())
-            {
-                insideFolders.append(file.getAbsolutePath() + "\n");
+        try {
+            length = folderSizeCalc(folder);
+            System.out.println("Размер всех файлов и папок в даннной директории - " + getLengthFormatted(length));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+//======================================================================================================================
+    /** Написал расчет размера в отдельном методе*/
+    private static long folderSizeCalc(File file) {
+        long size = 0;
+        if (file.isFile()) {
+            size = file.length();
+        } else if (file.isDirectory()) {
+            File[] subDir = file.listFiles();
+            for (File f : subDir) {
+                if (f.isFile()) {
+                    size += f.length();
+                } else {
+                    size += folderSizeCalc(f);
+                }
             }
         }
-        long lengthKB = length/(1024);
-        long lengthMB = length/((1024) * (1024));
-        long lengthGB= lengthMB/(1024);
-        System.out.println(length + " bytes");
-        System.out.println(lengthKB + " KB");
-        System.out.println(lengthMB + " MB");
-        System.out.println(lengthGB + " GB");
-        System.out.println(insideFolders.toString());
+        return size;
     }
-
+//======================================================================================================================
+    /**Также в отдельном методе сделал вывод в читаемом формате*/
+    private static String getLengthFormatted(float length) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        float lengthKB = 1024.0f;
+        float lengthMB = lengthKB * lengthKB;
+        float lengthGB = lengthMB * lengthKB;
+        float lengthTB = lengthGB * lengthKB;
+        if (length < lengthMB)
+            return df.format(length / lengthKB) + " Kb";
+        else if (length < lengthGB)
+            return df.format(length / lengthMB) + " Mb";
+        else if (length < lengthTB)
+            return df.format(length / lengthGB) + " Gb";
+        return df.format(length / lengthTB) + " Tb";
+    }
 }

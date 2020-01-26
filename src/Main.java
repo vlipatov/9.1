@@ -1,9 +1,12 @@
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String path;
         float length;
         System.out.println("Введите путь к папке. \nФормат для ввода - C:\\Users\\username\\folderName");
@@ -31,7 +34,7 @@ public class Main {
 
         return size;
     }
-    
+
 //======================================================================================================================
     /** Написал расчет размера в отдельном методе*/
     private static long folderSizeCalc(File file) {

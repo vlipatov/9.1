@@ -16,7 +16,22 @@ public class Main {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        long size  = sizeCalOneLine(path);
+
+        System.out.println("Размер при расчете в одну строку - " + getLengthFormatted(size));
+
     }
+//======================================================================================================================
+    /** Расчет размера в одну строку*/
+    private static long sizeCalOneLine(String path) throws IOException {
+        long size = Files.walk(Paths.get(path))
+                .filter(f -> f.toFile().isFile())
+                .mapToLong(f -> f.toFile().length())
+                .sum();
+
+        return size;
+    }
+    
 //======================================================================================================================
     /** Написал расчет размера в отдельном методе*/
     private static long folderSizeCalc(File file) {
